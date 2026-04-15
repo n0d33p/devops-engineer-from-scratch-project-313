@@ -17,12 +17,13 @@
 1. Склонируйте репозиторий:
 ```bash
    git clone https://github.com/n0d33p/devops-engineer-from-scratch-project-313.git
-   cd devops-engineer-from-scratch-project-313
-```
-    Установите зависимости проекта с помощью uv:
+   cd devops-engineer-from-scratch-project-313 
+   ```
 
+
+Установите зависимости проекта с помощью uv:
 ```bash
-    uv sync
+uv sync
 ```
 
 Запуск приложения
@@ -37,3 +38,4 @@ make run
 ```bash
 curl http://localhost:8080/ping 
 ```
+
