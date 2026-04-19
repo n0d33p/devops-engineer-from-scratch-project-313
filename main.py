@@ -1,13 +1,6 @@
 from flask import (
-    get_flashed_messages,
-    flash,
-    Flask,
-    redirect,
-    render_template,
-    request,
-    url_for
+    Flask
 )
-from dotenv import load_dotenv
 
 app = Flask(__name__)
 @app.route('/ping')
