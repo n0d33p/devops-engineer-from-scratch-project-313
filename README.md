@@ -1,5 +1,6 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/n0d33p/devops-engineer-from-scratch-project-313/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/n0d33p/devops-engineer-from-scratch-project-313/actions)
+[![Project Checks](https://github.com/n0d33p/devops-engineer-from-scratch-project-313/actions/workflows/main.yml/badge.svg)](https://github.com/n0d33p/devops-engineer-from-scratch-project-313/actions/workflows/main.yml)
 
 # DevOps Project: Step 1 (Python Application)
 
@@ -25,6 +26,20 @@
 ```bash
 uv sync
 ```
+## Разработка
+
+Для проверки качества кода и запуска тестов используйте следующие команды:
+
+**Запуск линтера (Ruff):**
+```bash
+make lint
+```
+
+**Запуск тестов (pytest):**
+```bash
+make test
+```
+
 
 ## Запуск приложения
 
