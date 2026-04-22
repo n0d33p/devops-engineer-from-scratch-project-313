@@ -54,3 +54,4 @@ make run
 curl http://localhost:8080/ping 
 ```
 
+Приложение развернуто по адресу: https://devops-engineer-from-scratch-project-313-llm2.onrender.com/
