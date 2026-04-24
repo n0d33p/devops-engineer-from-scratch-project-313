@@ -10,4 +10,4 @@ RUN uv sync --frozen --no-cache --no-install-project
 
 COPY . .
 
-CMD ["uv", "run", "gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "main:app"]
+CMD ["uv", "run", "gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8080", "main:app"]
