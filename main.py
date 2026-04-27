@@ -1,11 +1,12 @@
 import sentry_sdk
 import os
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, Response, status
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, Response, status, Query
 from database import engine, get_session
 from models import Link
 from sqlmodel import Session, select, SQLModel
 from dotenv import load_dotenv
 from contextlib import asynccontextmanager
+from sqlalchemy import func
 
 load_dotenv()
 
@@ -14,10 +15,10 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     profiles_sample_rate=1.0,
 )
+SQLModel.metadata.create_all(engine)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    SQLModel.metadata.create_all(engine)
     yield
 
 app = FastAPI(lifespan=lifespan)
@@ -39,9 +40,21 @@ async def create_link(link_data: Link, session: Session = Depends(get_session)):
         raise HTTPException(status_code=400, detail="Short url already exists")
 
 @router.get('/api/links')
-async def get_links(session: Session = Depends(get_session)):
-    links = session.exec(select(Link)).all()
+async def get_links(response: Response, session: Session = Depends(get_session), range: str = Query(None)):
+    if range:
+        indices = [int(i) for i in range.strip("[]").split(",")]
+        start = indices[0]
+        end = indices[1]
+    else:
+        start, end = 0, 9
+    limit = end - start + 1
+    total = session.exec(select(func.count(Link.id))).one()
+    statement = select(Link).offset(start).limit(limit)
+    links = session.exec(statement).all()
+    response.headers["Content-Range"] = f"links {start}-{end}/{total}"
+    response.headers["Access-Control-Expose-Headers"] = "Content-Range"
     return links
+
 
 @router.get('/api/links/{id}')
 async def get_one_link(id: int, session: Session = Depends(get_session)):
