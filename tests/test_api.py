@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from main import app
-from sqlmodel import Session, select, delete
+from sqlmodel import Session, delete
 from database import engine
 from models import Link
 
