@@ -57,9 +57,11 @@ https://devops-engineer-from-scratch-project-313-llm2.onrender.com/
 
 ---
 
+<br>
+
 <p align="center">
   <a href="https://ru.hexlet.io/programs/devops-engineer" target="_blank">
-    <img src="https://raw.githubusercontent.com/Hexlet/hexlet-correction-prog-python-check-project-lvl1/main/logo.png" width="120px" alt="Hexlet Logo">
+    <img src="https://raw.githubusercontent.com/Hexlet/assets/master/images/hexlet_logo128.png" width="120px" alt="Hexlet Logo">
   </a>
   <br>
   Проект выполнен в учебных целях на платформе <a href="https://ru.hexlet.io/pages/about">Hexlet</a>
