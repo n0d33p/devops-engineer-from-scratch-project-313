@@ -1,11 +1,22 @@
-# Переменные
 PORT ?= 8080
-DC = docker-compose
-APP_CONTAINER = link_shortener_app
+ifneq ($(GITHUB_ACTIONS),)
+    RUN_APP = uv run
+else
+    DC = docker compose
+    APP_CONTAINER = link_shortener_app
+    RUN_APP = $(DC) exec $(APP_CONTAINER) uv run
+endif
 
-.PHONY: up down restart logs test lint shell
+.PHONY: test lint up down run shell logs
 
-# --- Docker команды (для работы всего стека) ---
+run:
+	uv run uvicorn main:app --host 0.0.0.0 --port $(PORT)
+
+test:
+	$(RUN_APP) pytest
+
+lint:
+	$(RUN_APP) ruff check .
 
 up:
 	$(DC) up --build -d
@@ -13,20 +24,8 @@ up:
 down:
 	$(DC) down -v
 
-restart: down up
-
 logs:
 	$(DC) logs -f $(APP_CONTAINER)
 
-# --- Команды разработки (внутри контейнера) ---
-
-test:
-	$(DC) exec $(APP_CONTAINER) uv run pytest
-
-# Линтер тоже лучше гонять внутри, чтобы версии библиотек совпадали
-lint:
-	$(DC) exec $(APP_CONTAINER) uv run ruff check .
-
-# Быстрый доступ к терминалу контейнера
 shell:
 	$(DC) exec $(APP_CONTAINER) /bin/sh

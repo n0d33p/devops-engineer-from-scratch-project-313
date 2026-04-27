@@ -2,56 +2,54 @@
 [![Actions Status](https://github.com/n0d33p/devops-engineer-from-scratch-project-313/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/n0d33p/devops-engineer-from-scratch-project-313/actions)
 [![Project Checks](https://github.com/n0d33p/devops-engineer-from-scratch-project-313/actions/workflows/main.yml/badge.svg)](https://github.com/n0d33p/devops-engineer-from-scratch-project-313/actions/workflows/main.yml)
 
-# DevOps Project: Step 1 (Python Application)
+# Link Shortener (DevOps Project)
 
-Базовое Python-приложение на Flask, подготовленное в рамках первого шага обучения DevOps-инженера. Приложение представляет собой простой HTTP-сервер с проверочным маршрутом.
+Современный сокращатель ссылок на базе **FastAPI** и **SQLModel**. Проект разработан в рамках курса DevOps-инженера на Hexlet и демонстрирует навыки контейнеризации, автоматизации и деплоя облачных приложений.
 
-## Требования
+## 🚀 Возможности
+- **FastAPI API**: Быстрая и асинхронная обработка запросов.
+- **PostgreSQL**: Надежное хранение данных.
+- **Pagination**: Поддержка стандарта React Admin (`Content-Range` headers).
+- **Docker-ready**: Полная оркестрация через Docker Compose.
+- **Sentry Integration**: Мониторинг ошибок в реальном времени.
 
-Для запуска проекта вам понадобятся:
-* **Python** 3.10 или выше
-* **uv** (современный менеджер пакетов для Python)
-* **make** (утилита для сборки и запуска)
+## 🛠 Требования
+- **Docker** & **Docker Compose**
+- **Make** (для удобного управления командами)
+- **uv** (если планируется запуск вне контейнеров)
 
-## Установка
+## 🐳 Быстрый старт (Docker)
+
+Это самый простой способ запустить весь стек (App + Database) одной командой:
 
 1. Склонируйте репозиторий:
-```bash
-   git clone https://github.com/n0d33p/devops-engineer-from-scratch-project-313.git
-   cd devops-engineer-from-scratch-project-313 
-   ```
+   ```bash
+   git clone [https://github.com/n0d33p/devops-engineer-from-scratch-project-313.git](https://github.com/n0d33p/devops-engineer-from-scratch-project-313.git)
+   cd devops-engineer-from-scratch-project-313
 
+    Запустите проект:
+    Bash
 
-Установите зависимости проекта с помощью uv:
-```bash
-uv sync
-```
-## Разработка
+    make up
 
-Для проверки качества кода и запуска тестов используйте следующие команды:
+Приложение будет доступно по адресу: http://localhost:8080
+## 💻 Команды Makefile
 
-**Запуск линтера (Ruff):**
-```bash
-make lint
-```
+Команда	   Описание
+make up	   Собрать образы и запустить проект в фоне
+make down	Остановить контейнеры и удалить тома (очистка БД)
+make test	Запустить pytest внутри Docker-контейнера
+make lint	Проверить код линтером Ruff внутри контейнера
+make logs	Посмотреть логи приложения в реальном времени
+make shell	Зайти в терминал запущенного контейнера
 
-**Запуск тестов (pytest):**
-```bash
-make test
-```
+## 🧪 Тестирование
 
+Все тесты изолированы. Перед каждым запуском база данных очищается автоматически через фикстуры, что гарантирует чистоту проверок пагинации и CRUD-операций.
 
-## Запуск приложения
+## 🌍 Деплой
 
-Приложение запускается через Makefile. По умолчанию сервер поднимается на порту 8080.
-```bash
+Приложение развернуто и доступно по адресу:
+https://devops-engineer-from-scratch-project-313-llm2.onrender.com/
 
-make run
-```
-После запуска приложение будет доступно по адресу: http://localhost:8080
-
-```bash
-curl http://localhost:8080/ping 
-```
-
-Приложение развернуто по адресу: https://devops-engineer-from-scratch-project-313-llm2.onrender.com/
+Проект выполнен в учебных целях на платформе Hexlet.
