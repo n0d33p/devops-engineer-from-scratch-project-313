@@ -26,13 +26,15 @@
    ```bash
    git clone [https://github.com/n0d33p/devops-engineer-from-scratch-project-313.git](https://github.com/n0d33p/devops-engineer-from-scratch-project-313.git)
    cd devops-engineer-from-scratch-project-313
-
-    Запустите проект:
-    Bash
+   ```
+2. Запустите проект:
+   ```bash
 
     make up
+   ```
 
 Приложение будет доступно по адресу: http://localhost:8080
+
 ## 💻 Команды Makefile
 
 | Команда | Описание |
