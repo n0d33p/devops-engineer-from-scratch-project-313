@@ -1,22 +1,41 @@
 name: Project Checks
 
-on: [push, pull_request]
+on:
+  - push
+  - pull_request
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: shortener_db
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Install uv
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true 
+
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-        
+          python-version: '3.12' 
+
       - name: Install dependencies
         run: uv sync
 
@@ -24,4 +43,6 @@ jobs:
         run: make lint
 
       - name: Run tests
+        env:
+          DATABASE_URL: postgresql://user:password@localhost:5432/shortener_db
         run: make test
