@@ -18,3 +18,10 @@ ENV/
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Docker data (на случай, если используешь локальные папки для томов)
+.docker-data/
