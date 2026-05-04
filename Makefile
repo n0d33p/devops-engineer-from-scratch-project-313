@@ -12,8 +12,15 @@ test:
 lint:
 	uv run ruff check .
 
-up:
+db-up:
 	docker compose up -d db
 
+up:
+	docker compose up -d
+	
 down:
 	docker-compose down
+
+setup: build
+	uv sync
+	docker-compose up -d db
