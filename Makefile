@@ -19,8 +19,9 @@ up:
 	docker compose up -d
 	
 down:
-	docker-compose down
+	docker-compose down -v
 
-setup: build
+setup:
 	uv sync
+	docker-compose build
 	docker-compose up -d db
