@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
-from sqlmodel import Session, delete
+from sqlmodel import Session, delete, SQLModel
 from app.database import engine
 from app.models import Link
 
@@ -11,7 +11,11 @@ def client():
         yield c
 
 @pytest.fixture(autouse=True)
-def clean_database():
+def setup_database():
+    SQLModel.metadata.create_all(engine)
+
+@pytest.fixture(autouse=True)
+def clean_database(setup_database):
     with Session(engine) as session:
         session.execute(delete(Link))
         session.commit()
