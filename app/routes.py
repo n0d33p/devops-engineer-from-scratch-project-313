@@ -1,19 +1,27 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status, Query
+from fastapi import APIRouter, Depends, HTTPException, Response, status, Query, Request
 from sqlmodel import Session, select
 from app.models import Link
 from app.database import get_session
 from sqlalchemy import func
 from fastapi.responses import RedirectResponse
+import os
 
 router = APIRouter()
 
 @router.post('/api/links', status_code=201)
-async def create_link(link_data: Link, session: Session = Depends(get_session)):
+async def create_link(link_data: Link, request: Request, session: Session = Depends(get_session)):
     session.add(link_data)
     try:
         session.commit()
         session.refresh(link_data)
-        return link_data
+        base = os.getenv("BASE_URL", str(request.base_url)).rstrip('/')
+        return {
+            "id": link_data.id,
+            "original_url": link_data.original_url,
+            "short_name": link_data.short_name,
+            "short_url": f"{base}/r/{link_data.short_name}",
+            "created_at": link_data.created_at
+        }
     except Exception:
         session.rollback()
         raise HTTPException(status_code=400, detail="Short url already exists")
@@ -72,6 +80,6 @@ async def shortlink_redirect(short_name: str, session: Session = Depends(get_ses
     statement = select(Link).where(Link.short_name == short_name)
     link = session.exec(statement).first()
     if not link:
-        raise HTTPException(status_code=404, details="Link not found")
+        raise HTTPException(status_code=404, detail="Link not found")
     
     return RedirectResponse(url=link.original_url)
