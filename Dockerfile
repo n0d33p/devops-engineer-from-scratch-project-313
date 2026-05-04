@@ -5,9 +5,6 @@ WORKDIR /build
 COPY package.json package-lock.json* ./
 RUN npm install
 
-RUN mkdir -p /app/public
-RUN cp -r ./node_modules/@hexlet/project-devops-deploy-crud-frontend/dist/. /app/public/
-
 FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
@@ -22,7 +19,7 @@ RUN uv sync --frozen --no-cache
 COPY app/ ./app/
 COPY nginx.conf /etc/nginx/sites-available/default
 
-COPY --from=frontend-builder /app/static /app/public
+COPY --from=frontend-builder /build/node_modules/@hexlet/project-devops-deploy-crud-frontend/dist /app/public
 
 RUN echo "#!/bin/bash\nnginx -g 'daemon off;' & uv run gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8080 app.main:app" > /app/start.sh
 RUN chmod +x /app/start.sh
