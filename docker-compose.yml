@@ -1,12 +1,19 @@
 services:
   db:
-    image: postgres:15
+    image: postgres:15-alpine
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=shortener_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d shortener_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   app:
     build: .
@@ -16,4 +23,8 @@ services:
       - DATABASE_URL=postgresql://user:password@db:5432/shortener_db
       - BASE_URL=http://localhost:8080/r/
     depends_on:
-      db
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
