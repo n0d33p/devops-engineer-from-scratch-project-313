@@ -1,11 +1,15 @@
 services:
   db:
     image: postgres:15
-    container_name: link_shortener_db
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=shortener_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d shortener_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     ports:
       - "5432:5432"
     volumes:
@@ -20,7 +24,8 @@ services:
       - DATABASE_URL=postgresql://user:password@db:5432/shortener_db
       - BASE_URL=http://localhost:8080/r/
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:
