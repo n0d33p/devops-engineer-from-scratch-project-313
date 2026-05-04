@@ -10,7 +10,6 @@
 - **FastAPI API**: Быстрая и асинхронная обработка запросов.
 - **PostgreSQL**: Надежное хранение данных.
 - **Pagination**: Поддержка стандарта React Admin (`Content-Range` headers).
-- **Docker-ready**: Полная оркестрация через Docker Compose.
 - **Sentry Integration**: Мониторинг ошибок в реальном времени.
 
 ## 🛠 Требования

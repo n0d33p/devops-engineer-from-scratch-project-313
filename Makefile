@@ -4,7 +4,7 @@ FRAMEWORK := npx start-hexlet-devops-deploy-crud-frontend
 .PHONY: test lint up down run
 
 run:
-	npx concurrently "uv run uvicorn main:app --host 0.0.0.0 --port $(PORT)" "$(FRAMEWORK)"
+	npx concurrently "uv run uvicorn app.main:app --host 0.0.0.0 --port $(PORT)" "$(FRAMEWORK)"
 
 test:
 	uv run pytest

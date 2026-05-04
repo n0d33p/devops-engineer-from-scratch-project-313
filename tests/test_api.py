@@ -1,9 +1,9 @@
 import pytest
 from fastapi.testclient import TestClient
-from main import app
+from app.main import app
 from sqlmodel import Session, delete
-from database import engine
-from models import Link
+from app.database import engine
+from app.models import Link
 
 @pytest.fixture
 def client():

@@ -1,42 +1,11 @@
-import sentry_sdk
-import os
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, Response, status, Query
-from database import engine, get_session
-from models import Link
-from sqlmodel import Session, select, SQLModel
-from dotenv import load_dotenv
-from contextlib import asynccontextmanager
+from fastapi import APIRouter, Depends, HTTPException, Response, status, Query
+from sqlmodel import Session, select
+from app.models import Link
+from app.database import get_session
 from sqlalchemy import func
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
-load_dotenv()
-
-sentry_sdk.init(
-    dsn=os.getenv("SENTRY_DSN"),
-    traces_sample_rate=1.0,
-    profiles_sample_rate=1.0,
-)
-SQLModel.metadata.create_all(engine)
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    yield
-
-app = FastAPI(lifespan=lifespan)
 router = APIRouter()
-
-origins = ["http://localhost:5173"]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
-
-@app.get('/ping')
-async def pong():
-    return {"ping": "pong"}
 
 @router.post('/api/links', status_code=201)
 async def create_link(link_data: Link, session: Session = Depends(get_session)):
@@ -48,7 +17,8 @@ async def create_link(link_data: Link, session: Session = Depends(get_session)):
     except Exception:
         session.rollback()
         raise HTTPException(status_code=400, detail="Short url already exists")
-
+    
+    
 @router.get('/api/links')
 async def get_links(response: Response, session: Session = Depends(get_session), range: str = Query(None)):
     if range:
@@ -97,4 +67,11 @@ async def delete_link(id: int, session: Session = Depends(get_session)):
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-app.include_router(router)
+@router.get('/r/{short_name}')
+async def shortlink_redirect(short_name: str, session: Session = Depends(get_session)):
+    statement = select(Link).where(Link.short_name == short_name)
+    link = session.exec(statement).first()
+    if not link:
+        raise HTTPException(status_code=404, details="Link not found")
+    
+    return RedirectResponse(url=link.original_url)
